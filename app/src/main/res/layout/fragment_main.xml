@@ -7,5 +7,5 @@
     tools:showIn="@layout/activity_main"
     android:id="@+id/myList"
     app:layoutManager="LinearLayoutManager"
-    tools:listitem="@layout/stone_tbd"
+    tools:listitem="@layout/x_stone_tbd"
     />

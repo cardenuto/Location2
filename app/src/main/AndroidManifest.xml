@@ -26,18 +26,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddStone"
+            android:name=".StoneActivity"
             android:parentActivityName=".MainActivity"
             android:label="@string/title_add_stone"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AddStone"/>
+                android:value=".StoneActivity"/>
         </activity>
 
         <service
             android:name=".ObtainGPSDataService"
-            android:exported="false"></service>
+            android:exported="false"/>
     </application>
 
 </manifest>

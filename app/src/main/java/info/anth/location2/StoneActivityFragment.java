@@ -1,81 +1,49 @@
 package info.anth.location2;
 
-import android.Manifest;
+import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import info.anth.location2.Data.Stone;
 import info.anth.location2.Data.StoneTBD;
 
-public class AddStone extends AppCompatActivity {
-
+/**
+ * Created by Primary on 3/17/2016.
+ *
+ * Attempt to expand code into Fragment instead of activity alone
+ */
+public class StoneActivityFragment extends Fragment {
     public static final String LOG_TAG = ObtainGPSDataService.class.getSimpleName();
     //private Firebase mFirebaseRef;
-    private Firebase stoneRef;
-    private Firebase stoneTBDRef;
+    private static Firebase stoneRef;
+    private static Firebase stoneTBDRef;
     private ValueEventListener valueEventListener;
     //private String stoneID;
     //private String stoneTBDID;
-    private Boolean changed = false;
+    private static Boolean changed;
+    private static View rootView;
+
+    public StoneActivityFragment() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_stone);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
-
-        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        if (appBarLayout != null) {
-            appBarLayout.setTitle(getString(R.string.title_add_stone));
-        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Updating Location", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                findLocation();
-            }
-        });
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
 
         Firebase mFirebaseRef = new Firebase(getResources().getString(R.string.FIREBASE_URL));
         Firebase pushRefStone = mFirebaseRef.child("stone").push();
@@ -94,11 +62,22 @@ public class AddStone extends AppCompatActivity {
         stoneTBDRef = mFirebaseRef.child("stoneTBD").child(stoneTBDID);
 
         // update stone for stoneTBD
-        Map<String, Object> updateStoneTBD = new HashMap<String, Object>();
+        Map<String, Object> updateStoneTBD = new HashMap<>();
         updateStoneTBD.put(Stone.columns.COLUMN_STONETBD, stoneTBDID);
         stoneRef.updateChildren(updateStoneTBD);
 
+        changed = false;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        rootView = inflater.inflate(R.layout.fragment_stone, container, false);
+
         getDatabase();
+
+        return rootView;
     }
 
     private void getDatabase() {
@@ -119,24 +98,24 @@ public class AddStone extends AppCompatActivity {
     }
 
     private void refreshScreen(Stone thisStone) {
-        TextView longitudeTextView = (TextView) findViewById(R.id.longitude);
+        TextView longitudeTextView = (TextView) rootView.findViewById(R.id.longitude);
         longitudeTextView.setText(String.valueOf(thisStone.getLongitude()));
-        TextView latitudeTextView = (TextView) findViewById(R.id.latitude);
+        TextView latitudeTextView = (TextView) rootView.findViewById(R.id.latitude);
         latitudeTextView.setText(String.valueOf(thisStone.getLatitude()));
-        EditText name = (EditText) findViewById(R.id.location_name);
+        EditText name = (EditText) rootView.findViewById(R.id.location_name);
         name.setText(thisStone.getMethod());
 
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progressBar.setProgress(thisStone.getProgressGPS());
     }
 
-    protected void findLocation() {
+    protected static void findLocation() {
 
         changed = true;
-        Intent myIntent = new Intent(this, ObtainGPSDataService.class);
+        Intent myIntent = new Intent(rootView.getContext(), ObtainGPSDataService.class);
         myIntent.putExtra(ObtainGPSDataService.REQUEST_REF_STONE, stoneRef.getRef().toString());
         myIntent.putExtra(ObtainGPSDataService.REQUEST_REF_STONETBD, stoneTBDRef.getRef().toString());
-        startService(myIntent);
+        rootView.getContext().startService(myIntent);
 
     }
 
@@ -149,4 +128,5 @@ public class AddStone extends AppCompatActivity {
             stoneTBDRef.removeValue();
         }
     }
+
 }

@@ -9,12 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                view.getContext().startActivity(new Intent(view.getContext(), AddStone.class));
+                view.getContext().startActivity(new Intent(view.getContext(), StoneActivity.class));
             }
         });
     }

@@ -1,11 +1,9 @@
 package info.anth.location2;
 
-import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,6 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseRecyclerAdapter;
 
-import java.lang.reflect.Field;
-
-import info.anth.location2.Data.Chat;
 import info.anth.location2.Data.StoneTBD;
 
 /**
@@ -55,7 +50,7 @@ public class MainActivityFragment extends Fragment {
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         //recycler.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
-        mAdapter = new FirebaseRecyclerAdapter<StoneTBD, StoneTBDMessageViewHolder>(StoneTBD.class, R.layout.stone_tbd, StoneTBDMessageViewHolder.class, mFirebaseRef) {
+        mAdapter = new FirebaseRecyclerAdapter<StoneTBD, StoneTBDMessageViewHolder>(StoneTBD.class, R.layout.x_stone_tbd, StoneTBDMessageViewHolder.class, mFirebaseRef) {
             @Override
             public void populateViewHolder(StoneTBDMessageViewHolder stoneTBDMessageViewHolder, StoneTBD stoneTBD, int position) {
                 String messageGPS = stoneTBD.getGpsMsg();
