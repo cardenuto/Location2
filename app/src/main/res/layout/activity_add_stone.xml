@@ -32,7 +32,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="info.anth.locationfinder.AddLocation"
+    tools:context="info.anth.locationfinder.AddStone"
     tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout
@@ -79,6 +79,16 @@
                 android:hint="Name"
                 android:layout_margin="25dp"
                 />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:theme="@style/LinearProgress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:max="100"
+                android:padding="10dp"
+                android:progress="0"/>
             <EditText
                 android:id="@+id/latitude"
                 android:layout_width="match_parent"
