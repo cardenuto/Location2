@@ -37,7 +37,7 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat").child("lower");
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
         Log.i("ajc", Build.MANUFACTURER + " : " + Build.MODEL);
         Log.i("ajc", "Android OS: " + Build.VERSION.RELEASE + " : sdk=" + String.valueOf(Build.VERSION.SDK_INT));
     }

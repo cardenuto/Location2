@@ -24,16 +24,16 @@ public class Stone {
     private Long secondsToGPS;
     private Boolean processed;
     private int progressGPS;
+    private String stoneTBD;
 
     // Required default constructor for Firebase object mapping
     @SuppressWarnings("unused")
     private Stone() {
     }
 
-    //    Chat(String message, String author, String lower[]) {
     public Stone(String deviceModel, String deviceOS, String method, String provider,
           Double longitude, Double latitude, Double accuracy,
-          Double altitude, Long secondsToGPS, Boolean processed, int progressGPS) {
+          Double altitude, Long secondsToGPS, Boolean processed, int progressGPS, String stoneTBD) {
         this.deviceModel = deviceModel;
         this.deviceOS = deviceOS;
         this.method = method;
@@ -45,7 +45,7 @@ public class Stone {
         this.secondsToGPS = secondsToGPS;
         this.processed = processed;
         this.progressGPS = progressGPS;
-
+        this.stoneTBD = stoneTBD;
     }
 
     public String getDeviceModel() { return deviceModel; }
@@ -59,6 +59,7 @@ public class Stone {
     public Long getSecondsToGPS() { return secondsToGPS; }
     public Boolean getProcessed() { return processed; }
     public int getProgressGPS() { return progressGPS; }
+    public String getStoneTBD() { return stoneTBD; }
 
     public static class columns {
 
@@ -74,6 +75,7 @@ public class Stone {
         public static String COLUMN_SECONDSTOGPS = "secondsToGPS";
         public static String COLUMN_PROCESSED = "processed";
         public static String COLUMN_PROGRESSGPS = "progressGPS";
+        public static String COLUMN_STONETBD = "stoneTBD";
 
         public static Map<String, Object> getFullMap(Stone stone) {
             Map<String, Object> fullMap = new HashMap<String, Object>();
@@ -89,9 +91,26 @@ public class Stone {
             fullMap.put(COLUMN_SECONDSTOGPS, stone.getSecondsToGPS());
             fullMap.put(COLUMN_PROCESSED, stone.getProcessed());
             fullMap.put(COLUMN_PROGRESSGPS, stone.getProgressGPS());
+            fullMap.put(COLUMN_STONETBD, stone.getStoneTBD());
 
             return fullMap;
         }
 
+        public static Map<String, Object> getGPSMap(Stone stone) {
+            Map<String, Object> fullMap = new HashMap<String, Object>();
+
+            fullMap.put(COLUMN_DEVICEMODEL, stone.getDeviceModel());
+            fullMap.put(COLUMN_DEVICEOS, stone.getDeviceOS());
+            fullMap.put(COLUMN_METHOD, stone.getMethod());
+            fullMap.put(COLUMN_PROVIDER, stone.getProvider());
+            fullMap.put(COLUMN_LONGITUDE, stone.getLongitude());
+            fullMap.put(COLUMN_LATITUDE, stone.getLatitude());
+            fullMap.put(COLUMN_ACCURACY, stone.getAccuracy());
+            fullMap.put(COLUMN_ALTITUDE, stone.getAltitude());
+            fullMap.put(COLUMN_SECONDSTOGPS, stone.getSecondsToGPS());
+            fullMap.put(COLUMN_PROGRESSGPS, stone.getProgressGPS());
+
+            return fullMap;
+        }
     }
 }

@@ -25,12 +25,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import info.anth.location2.Data.Stone;
+import info.anth.location2.Data.StoneTBD;
 
 
 public class ObtainGPSDataService extends IntentService
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
-    public static final String REQUEST_REF = "ref";
+    public static final String REQUEST_REF_STONE = "ref_stone";
+    public static final String REQUEST_REF_STONETBD = "ref_stoneTBD";
     public static final String LOG_TAG = ObtainGPSDataService.class.getSimpleName();
     /**
      * Provides the entry point to Google Play services.
@@ -71,6 +73,7 @@ public class ObtainGPSDataService extends IntentService
     private static Date startDate;
 
     private Firebase mFirebaseRef;
+    private String fireRefStoneTBD;
 
     public ObtainGPSDataService() {
         super("ObtainGPSDataService");
@@ -91,8 +94,10 @@ public class ObtainGPSDataService extends IntentService
             }
 */
             //try {
-                final String refFirebase = intent.getStringExtra(REQUEST_REF);
-                Log.i(LOG_TAG, refFirebase);
+
+            final String refFirebase = intent.getStringExtra(REQUEST_REF_STONE);
+            fireRefStoneTBD = intent.getStringExtra(REQUEST_REF_STONETBD);
+            Log.i(LOG_TAG, refFirebase);
 
             /*} catch (InterruptedException e){
 
@@ -222,11 +227,18 @@ public class ObtainGPSDataService extends IntentService
             Long seconds = (new Date().getTime() - startDate.getTime())/1000;
 
             Stone newStone = new Stone(deviceModel, deviceOS, method, location.getProvider(), location.getLongitude(), location.getLatitude(), (double) location.getAccuracy(),
-                    location.getAltitude(), seconds, false, 100);
+                    location.getAltitude(), seconds, false, 100, "");
             //mFirebaseRef.push().setValue(newStone);
 
-            mFirebaseRef.updateChildren(Stone.columns.getFullMap(newStone));
+            mFirebaseRef.updateChildren(Stone.columns.getGPSMap(newStone));
             mFirebaseRef.onDisconnect();
+
+            Firebase refStoneTBD = new Firebase(fireRefStoneTBD);
+            Map<String, Object> messageGPS = new HashMap<String, Object>();
+            messageGPS.put(StoneTBD.columns.COLUMN_GPSMSG, "GPS Accuracy " + String.valueOf(Math.round(location.getAccuracy())) + " meters");
+            refStoneTBD.updateChildren(messageGPS);
+            refStoneTBD.onDisconnect();
+
         }
         else if (currentCheck >= maxChecks && currentCount == 0) {
             stopLocationUpdates();
@@ -243,11 +255,18 @@ public class ObtainGPSDataService extends IntentService
             Long seconds = (new Date().getTime() - startDate.getTime())/1000;
 
             Stone newStone = new Stone(deviceModel, deviceOS, method, location.getProvider(), bestLongitude, bestLatitude, bestAccuracy,
-                    bestAltitude, seconds, false, 100);
+                    bestAltitude, seconds, false, 100, "");
             //mFirebaseRef.push().setValue(newStone);
 
-            mFirebaseRef.updateChildren(Stone.columns.getFullMap(newStone));
+            mFirebaseRef.updateChildren(Stone.columns.getGPSMap(newStone));
             mFirebaseRef.onDisconnect();
+
+            Firebase refStoneTBD = new Firebase(fireRefStoneTBD);
+            Map<String, Object> messageGPS = new HashMap<String, Object>();
+            messageGPS.put(StoneTBD.columns.COLUMN_GPSMSG, "GPS Accuracy " + String.valueOf(Math.round(location.getAccuracy())) + " meters");
+            refStoneTBD.updateChildren(messageGPS);
+            refStoneTBD.onDisconnect();
+
         }
     }
 /*
