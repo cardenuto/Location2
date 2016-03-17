@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -17,6 +18,7 @@ import com.firebase.ui.FirebaseRecyclerAdapter;
 import java.lang.reflect.Field;
 
 import info.anth.location2.Data.Chat;
+import info.anth.location2.Data.StoneTBD;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,9 +39,9 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
-        Log.i("ajc", Build.MANUFACTURER + " : " + Build.MODEL);
-        Log.i("ajc", "Android OS: " + Build.VERSION.RELEASE + " : sdk=" + String.valueOf(Build.VERSION.SDK_INT));
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("stoneTBD");
+        //Log.i("ajc", Build.MANUFACTURER + " : " + Build.MODEL);
+       // Log.i("ajc", "Android OS: " + Build.VERSION.RELEASE + " : sdk=" + String.valueOf(Build.VERSION.SDK_INT));
     }
 
     @Override
@@ -53,14 +55,29 @@ public class MainActivityFragment extends Fragment {
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
         //recycler.setItemAnimator(new SlideInOutLeftItemAnimator(mRecyclerView));
 
-        mAdapter = new FirebaseRecyclerAdapter<Chat, ChatMessageViewHolder>(Chat.class, R.layout.chat_message, ChatMessageViewHolder.class, mFirebaseRef) {
+        mAdapter = new FirebaseRecyclerAdapter<StoneTBD, StoneTBDMessageViewHolder>(StoneTBD.class, R.layout.stone_tbd, StoneTBDMessageViewHolder.class, mFirebaseRef) {
             @Override
-            public void populateViewHolder(ChatMessageViewHolder chatMessageViewHolder, Chat chatMessage, int position) {
-                chatMessageViewHolder.nameText.setText(chatMessage.getAuthor());
-                chatMessageViewHolder.messageText.setText(chatMessage.getMessage());
-                chatMessageViewHolder.keyText.setText(String.valueOf(mAdapter.getRef(position).getKey()));
-                //chatMessageViewHolder.lowerText.setText(chatMessage.getLower().toString());
-                chatMessageViewHolder.lowerText.setText(chatMessage.getLevel1());
+            public void populateViewHolder(StoneTBDMessageViewHolder stoneTBDMessageViewHolder, StoneTBD stoneTBD, int position) {
+                String messageGPS = stoneTBD.getGpsMsg();
+                String messagePicture = stoneTBD.getPictureMsg();
+                String messagePeople = stoneTBD.getPeopleMsg();
+
+                String message = messageGPS;
+                message += (messagePicture == null || messagePicture.equals("")) ? "" : System.getProperty("line.separator") + messagePicture;
+                message += (messagePeople == null || messagePeople.equals("")) ? "" : System.getProperty("line.separator") + messagePeople;
+                //message += (stoneTBD.getPictureMsg() == null || stoneTBD.getPictureMsg() == "") ? "" : System.getProperty("line.separator") + stoneTBD.getPictureMsg();
+                //message += (stoneTBD.getPeopleMsg() == null || stoneTBD.getPeopleMsg() == "") ? "" : System.getProperty("line.separator") + stoneTBD.getPeopleMsg();
+                stoneTBDMessageViewHolder.stoneTBD_text.setText(message);
+
+                if(messageGPS != null && !messageGPS.substring(0, 1).equals("M")){
+                    if(messagePicture != null && messagePicture.substring(0, 1).equals("M")) {
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_camera_alt_24dp);
+                    } else if(messagePeople != null && messagePeople.substring(0, 1).equals("M")) {
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_person_24dp);
+                    } else {
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_refresh_24dp);
+                    }
+                }
             }
         };
         recycler.setAdapter(mAdapter);
@@ -69,7 +86,18 @@ public class MainActivityFragment extends Fragment {
 
     }
 
-    public static class ChatMessageViewHolder extends RecyclerView.ViewHolder {
+    public static class StoneTBDMessageViewHolder extends RecyclerView.ViewHolder {
+        TextView stoneTBD_text;
+        ImageView stoneTBD_image;
+
+        public StoneTBDMessageViewHolder(View itemView) {
+            super(itemView);
+            stoneTBD_text = (TextView)itemView.findViewById(R.id.stoneTBD_text);
+            stoneTBD_image = (ImageView)itemView.findViewById(R.id.stoneTBD_image);
+        }
+    }
+
+    /*public static class ChatMessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
         TextView nameText;
         TextView keyText;
@@ -82,7 +110,7 @@ public class MainActivityFragment extends Fragment {
             keyText = (TextView) itemView.findViewById(R.id.key);
             lowerText = (TextView) itemView.findViewById(R.id.lower);
         }
-    }
+    }*/
 
     @Override
     public void onDestroy() {
