@@ -1,9 +1,12 @@
 package info.anth.location2;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +25,14 @@ public class MainActivityFragment extends Fragment {
 
     // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://shining-inferno-6812.firebaseio.com";
+    public static final String LOG_TAG = ObtainGPSDataService.class.getSimpleName();
 
     private Firebase mFirebaseRef;
     FirebaseRecyclerAdapter mAdapter;
+    // currentStep
+    // adding a new stone the first step should be gps and the second camera
+    // after that no floating action button - entering people.
+    private static String currentStep;
 
     public MainActivityFragment() {
     }
@@ -64,6 +72,21 @@ public class MainActivityFragment extends Fragment {
                 //message += (stoneTBD.getPeopleMsg() == null || stoneTBD.getPeopleMsg() == "") ? "" : System.getProperty("line.separator") + stoneTBD.getPeopleMsg();
                 stoneTBDMessageViewHolder.stoneTBD_text.setText(message);
 
+                switch(StoneTBD.columns.getCurrentStep(stoneTBD)) {
+                    case "camera":
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_camera_alt_24dp);
+                        break;
+                    case "people":
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_person_24dp);
+                        break;
+                    case "refresh":
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_refresh_24dp);
+                        break;
+                    default:
+                        // gps
+                        stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_place_24dp);
+                }
+                /*
                 if(messageGPS != null && !messageGPS.substring(0, 1).equals("M")){
                     if(messagePicture != null && messagePicture.substring(0, 1).equals("M")) {
                         stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_camera_alt_24dp);
@@ -73,6 +96,27 @@ public class MainActivityFragment extends Fragment {
                         stoneTBDMessageViewHolder.stoneTBD_image.setImageResource(R.drawable.ic_refresh_24dp);
                     }
                 }
+                */
+            }
+            /**
+             * Ability to click the holder?
+             */
+            @Override
+            public void onBindViewHolder(final StoneTBDMessageViewHolder holder, int position) {
+                super.onBindViewHolder(holder, position);
+
+                holder.mItem = (StoneTBD) mAdapter.getItem(position);
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, StoneActivity.class);
+                        intent.putExtra(StoneActivity.REQUEST_CURRENT_STEP, StoneTBD.columns.getCurrentStep(holder.mItem));
+                        intent.putExtra(StoneActivityFragment.ARGUMENT_STONEID, holder.mItem.getStoneID());
+                        context.startActivity(intent);
+                    }
+                });
             }
         };
         recycler.setAdapter(mAdapter);
@@ -82,11 +126,14 @@ public class MainActivityFragment extends Fragment {
     }
 
     public static class StoneTBDMessageViewHolder extends RecyclerView.ViewHolder {
+        View mView;
         TextView stoneTBD_text;
         ImageView stoneTBD_image;
+        public StoneTBD mItem;
 
         public StoneTBDMessageViewHolder(View itemView) {
             super(itemView);
+            mView = itemView;
             stoneTBD_text = (TextView)itemView.findViewById(R.id.stoneTBD_text);
             stoneTBD_image = (ImageView)itemView.findViewById(R.id.stoneTBD_image);
         }

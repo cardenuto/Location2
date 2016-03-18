@@ -263,7 +263,7 @@ public class ObtainGPSDataService extends IntentService
 
             Firebase refStoneTBD = new Firebase(fireRefStoneTBD);
             Map<String, Object> messageGPS = new HashMap<String, Object>();
-            messageGPS.put(StoneTBD.columns.COLUMN_GPSMSG, "GPS Accuracy " + String.valueOf(Math.round(location.getAccuracy())) + " meters");
+            messageGPS.put(StoneTBD.columns.COLUMN_GPSMSG, "GPS Accuracy " + String.valueOf(Math.round(bestAccuracy)) + " meters");
             refStoneTBD.updateChildren(messageGPS);
             refStoneTBD.onDisconnect();
 

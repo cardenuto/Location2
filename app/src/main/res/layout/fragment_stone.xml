@@ -4,44 +4,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="15dip"
+        >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/location_name"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:hint="Name" />
+            android:layout_margin="10dip"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="100"
-            android:padding="10dp"
-            android:progress="0"
-            android:theme="@style/LinearProgress" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="Location Details:"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/latitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:focusable="false"
-            android:hint="Latitude" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/longitude"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="25dp"
-            android:focusable="false"
-            android:hint="Longitude" />
+                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:stretchColumns="1">
+
+                    <TableRow>
+
+                        <TextView
+                            android:paddingBottom="3dip"
+                            android:paddingEnd="6dip"
+                            android:paddingRight="6dip"
+                            android:paddingTop="3dip"
+                            android:text="Longitude"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/longitude"
+                            android:layout_width="0dp"
+                            android:gravity="end"
+                            android:padding="3dip"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:paddingBottom="3dip"
+                            android:paddingEnd="6dip"
+                            android:paddingRight="6dip"
+                            android:paddingTop="3dip"
+                            android:text="Latitude"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/latitude"
+                            android:layout_width="0dp"
+                            android:gravity="end"
+                            android:padding="3dip"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_marginRight="5dip"
+            >
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="100dip"
+                android:layout_height="100dip"
+                android:gravity="end"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/circular" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/accuracy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Meters" />
+
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/colorAccent"
+            android:layout_marginRight="110dip"
+            android:layout_marginLeft="10dip"
+            />
+        <TextView
+            android:id="@+id/other_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:textSize="14sp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorAccent"
+            />
+        <Button
+            android:id="@+id/show_map_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show on Map"
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            >
+            <Button
+                android:id="@+id/picture_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Take Picture"
+                android:textColor="@color/colorAccent"
+                />
+        </LinearLayout>
+</LinearLayout>
 </android.support.v4.widget.NestedScrollView>

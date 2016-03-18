@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import info.anth.location2.Data.StoneTBD;
+
 public class MainActivity extends AppCompatActivity {
 
     // TODO: change this to your own Firebase URL
@@ -35,9 +37,12 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Add a new Stone", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                view.getContext().startActivity(new Intent(view.getContext(), StoneActivity.class));
+                // Need to set the default of the current step for adding a new stone
+                Intent intent = new Intent(view.getContext(), StoneActivity.class);
+                intent.putExtra(StoneActivity.REQUEST_CURRENT_STEP, "gps");
+                view.getContext().startActivity(intent);
             }
         });
     }

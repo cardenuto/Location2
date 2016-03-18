@@ -3,6 +3,8 @@ package info.anth.location2.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+import info.anth.location2.R;
+
 /**
  * Created by Primary on 3/17/2016.
  *
@@ -52,13 +54,32 @@ public class StoneTBD {
         public static Map<String, Object> getFullMap(StoneTBD stoneTBD) {
             Map<String, Object> fullMap = new HashMap<String, Object>();
 
-            fullMap.put(COLUMN_STONEID, stoneTBD. getStoneID());
-            fullMap.put(COLUMN_PICTUREURI, stoneTBD. getPictureURI());
-            fullMap.put(COLUMN_PICTUREMSG, stoneTBD. getPictureMsg());
-            fullMap.put(COLUMN_GPSMSG, stoneTBD. getGpsMsg());
-            fullMap.put(COLUMN_PEOPLEMSG, stoneTBD. getPeopleMsg());
+            fullMap.put(COLUMN_STONEID, stoneTBD.getStoneID());
+            fullMap.put(COLUMN_PICTUREURI, stoneTBD.getPictureURI());
+            fullMap.put(COLUMN_PICTUREMSG, stoneTBD.getPictureMsg());
+            fullMap.put(COLUMN_GPSMSG, stoneTBD.getGpsMsg());
+            fullMap.put(COLUMN_PEOPLEMSG, stoneTBD.getPeopleMsg());
 
             return fullMap;
+        }
+
+        public static String getCurrentStep(StoneTBD stoneTBD){
+            String currentStep = "gps";
+            String messageGPS = stoneTBD.getGpsMsg();
+            String messagePicture = stoneTBD.getPictureMsg();
+            String messagePeople = stoneTBD.getPeopleMsg();
+
+            if(messageGPS != null && messageGPS.length() > 0 && !messageGPS.substring(0, 1).equals("M")){
+                if(messagePicture != null && messagePicture.length() > 0 && messagePicture.substring(0, 1).equals("M")) {
+                    currentStep = "camera";
+                } else if(messagePeople != null && messagePeople.length() > 0 && messagePeople.substring(0, 1).equals("M")) {
+                    currentStep = "people";
+                } else {
+                    currentStep = "refresh";
+                }
+            }
+
+            return currentStep;
         }
 
     }
