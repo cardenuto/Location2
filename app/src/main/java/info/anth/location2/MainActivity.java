@@ -6,28 +6,22 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
-import info.anth.location2.Data.StoneTBD;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MainActivity extends AppCompatActivity {
-
-    // TODO: change this to your own Firebase URL
-    //private static final String FIREBASE_URL = "https://android-chat.firebaseio-demo.com";
-    //private static final String FIREBASE_URL = "https://shining-inferno-6812.firebaseio.com";
-
-    //private Firebase mFirebaseRef;
-    //private ValueEventListener mConnectedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Setup our Firebase mFirebaseRef
-        //mFirebaseRef = new Firebase(FIREBASE_URL).child("chat");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,6 +39,17 @@ public class MainActivity extends AppCompatActivity {
                 view.getContext().startActivity(intent);
             }
         });
+
+        // test image
+        //ImageView testImage = (ImageView) findViewById(R.id.test_image);
+        //testImage.setImageResource(R.drawable.logo);
+
+        //Cloudinary cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
+        //Cloudinary cloudinary = LocationApplication.getInstance(this).getCloudinary();
+        //String url_string = cloudinary.url().transformation(new Transformation().width(100).height(150).crop("fill")).generate("sample.jpg");
+        //Log.i("ajc", cloudinary.url().transformation(new Transformation().width(100).height(150).crop("fill")).generate("sample.jpg"));
+        //ImageLoader.getInstance().displayImage(url_string, testImage);
+
     }
 
     @Override
@@ -69,26 +74,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*@Override
-    public void onResume() {
-        super.onResume();
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(MainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
-    }*/
 }

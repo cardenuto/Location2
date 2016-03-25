@@ -227,7 +227,7 @@ public class ObtainGPSDataService extends IntentService
             Long seconds = (new Date().getTime() - startDate.getTime())/1000;
 
             Stone newStone = new Stone(deviceModel, deviceOS, method, location.getProvider(), location.getLongitude(), location.getLatitude(), (double) location.getAccuracy(),
-                    location.getAltitude(), seconds, false, 100, "");
+                    location.getAltitude(), seconds, false, 100, "", false);
             //mFirebaseRef.push().setValue(newStone);
 
             mFirebaseRef.updateChildren(Stone.columns.getGPSMap(newStone));
@@ -255,7 +255,7 @@ public class ObtainGPSDataService extends IntentService
             Long seconds = (new Date().getTime() - startDate.getTime())/1000;
 
             Stone newStone = new Stone(deviceModel, deviceOS, method, location.getProvider(), bestLongitude, bestLatitude, bestAccuracy,
-                    bestAltitude, seconds, false, 100, "");
+                    bestAltitude, seconds, false, 100, "", false);
             //mFirebaseRef.push().setValue(newStone);
 
             mFirebaseRef.updateChildren(Stone.columns.getGPSMap(newStone));

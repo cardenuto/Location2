@@ -1,5 +1,7 @@
 package info.anth.location2.Data;
 
+import android.net.Uri;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.client.Firebase;
 
@@ -25,6 +27,7 @@ public class Stone {
     private Boolean processed;
     private int progressGPS;
     private String stoneTBD;
+    private Boolean imageUploaded;
 
     // Required default constructor for Firebase object mapping
     @SuppressWarnings("unused")
@@ -33,7 +36,8 @@ public class Stone {
 
     public Stone(String deviceModel, String deviceOS, String method, String provider,
           Double longitude, Double latitude, Double accuracy,
-          Double altitude, Long secondsToGPS, Boolean processed, int progressGPS, String stoneTBD) {
+          Double altitude, Long secondsToGPS, Boolean processed, int progressGPS, String stoneTBD,
+                 Boolean imageUploaded) {
         this.deviceModel = deviceModel;
         this.deviceOS = deviceOS;
         this.method = method;
@@ -46,6 +50,7 @@ public class Stone {
         this.processed = processed;
         this.progressGPS = progressGPS;
         this.stoneTBD = stoneTBD;
+        this.imageUploaded = imageUploaded;
     }
 
     public String getDeviceModel() { return deviceModel; }
@@ -60,6 +65,7 @@ public class Stone {
     public Boolean getProcessed() { return processed; }
     public int getProgressGPS() { return progressGPS; }
     public String getStoneTBD() { return stoneTBD; }
+    public Boolean getImageUploaded() { return imageUploaded; }
 
     public static class columns {
 
@@ -76,6 +82,7 @@ public class Stone {
         public static String COLUMN_PROCESSED = "processed";
         public static String COLUMN_PROGRESSGPS = "progressGPS";
         public static String COLUMN_STONETBD = "stoneTBD";
+        public static String COLUMN_IMAGEUPLOADED = "imageUploaded";
 
         public static Map<String, Object> getFullMap(Stone stone) {
             Map<String, Object> fullMap = new HashMap<String, Object>();
@@ -92,6 +99,7 @@ public class Stone {
             fullMap.put(COLUMN_PROCESSED, stone.getProcessed());
             fullMap.put(COLUMN_PROGRESSGPS, stone.getProgressGPS());
             fullMap.put(COLUMN_STONETBD, stone.getStoneTBD());
+            fullMap.put(COLUMN_IMAGEUPLOADED, stone.getImageUploaded());
 
             return fullMap;
         }
@@ -111,6 +119,14 @@ public class Stone {
             fullMap.put(COLUMN_PROGRESSGPS, stone.getProgressGPS());
 
             return fullMap;
+        }
+
+        public static Uri geoUri(Stone stone, String label) {
+            String uriBegin = "geo:" + String.valueOf(stone.getLatitude()) + "," + String.valueOf(stone.getLongitude());
+            String query = String.valueOf(stone.getLatitude()) + "," + String.valueOf(stone.getLongitude()) + "(" + label + ")";
+            String encodedQuery = Uri.encode(query);
+            String uriString = uriBegin + "?q=" + encodedQuery + "&z=23";
+            return Uri.parse(uriString);
         }
     }
 }

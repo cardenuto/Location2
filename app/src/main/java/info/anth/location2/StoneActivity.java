@@ -1,5 +1,6 @@
 package info.anth.location2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -38,11 +40,14 @@ public class StoneActivity extends AppCompatActivity {
     //private String stoneTBDID;
     private Boolean changed = false;
     private static String currentStep;
+    private Activity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stone);
+
+        thisActivity = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
@@ -82,7 +87,8 @@ public class StoneActivity extends AppCompatActivity {
                         message = "Starting Camera";
                         currentStep = "people";
                         fab.hide();
-                        StoneActivityFragment.takePicture();
+                        StoneActivityFragment.dispatchTakePictureIntent(thisActivity);
+                        //StoneActivityFragment.takePicture(thisActivity);
                         break;
                     default:
                         // do not show the fab
@@ -207,5 +213,25 @@ public class StoneActivity extends AppCompatActivity {
         }
     }
 */
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            StoneActivityFragment.onBackPressed();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        StoneActivityFragment.onBackPressed();
+    }
 
 }
